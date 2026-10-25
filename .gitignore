@@ -1,0 +1,18 @@
+# 构建产物
+dist/
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+
+# 依赖与反编译参考（体积大、可重新下载）
+vendor/
+probe/ref/
+probe/edgeprof/
+windows/_probe/
+
+# 临时/日志
+*.log
+probe/*.txt
+probe/shot_*.png
+_selftest/
