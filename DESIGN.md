@@ -229,7 +229,7 @@ DOM 契约（`#q`、`#list [data-i]`、`.name/.sub/.tag`、`#btnPlay`、`#tCur/#
 | 界面层 | `web/index.html` / `css/app.css` / `js/ui/app.js` | 4 视图 + 3 覆盖层重做，封面渲染、遮罩毛玻璃、双行错误 toast、移动端底部 tab |
 
 最终体积：`index.html` 11923B + `app.css` 25708B + `app.js` 50921B = **88552B**（前端总量），
-APK 84952B，Windows exe 56320B。
+APK 84952B，Windows exe 62976B（含图标）。
 
 ### 10.2 Windows 壳端到端（真实 exe + CDP，`probe/verify_shell.mjs`）
 
