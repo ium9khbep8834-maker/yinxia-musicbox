@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>音匣 MusicBox</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<!-- 内联图标（stroke 1.7 / currentColor），无外部资源 -->
+<svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="i-logo" viewBox="0 0 24 24"><path d="M9 17.4V7.2l7.6-1.7v8.9"/><circle cx="6.7" cy="17.7" r="2.35"/><circle cx="14.3" cy="16.1" r="2.35"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.6" cy="10.6" r="6.4"/><path d="M15.4 15.4 20 20"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 19.8s-7.4-4.3-7.4-9.1A4.1 4.1 0 0 1 12 7.9a4.1 4.1 0 0 1 7.4 2.8c0 4.8-7.4 9.1-7.4 9.1Z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></symbol>
+  <symbol id="i-note-list" viewBox="0 0 24 24"><path d="M4 6h9M4 11h9M4 16h6"/><circle cx="17.6" cy="17" r="2.2"/><path d="M19.8 17V8.6l2.2-.6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7.6V12l3 2"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.9"/><path d="M12 3.4v2.2M12 18.4v2.2M4.7 7.7l1.9 1.1M17.4 15.2l1.9 1.1M4.7 16.3l1.9-1.1M17.4 8.8l1.9-1.1"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8.2 5.2v13.6L18.6 12Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8.6 5.2h2.7v13.6H8.6zM12.9 5.2h2.7v13.6h-2.7z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="M18.4 5.6v12.8L9.4 12Z" fill="currentColor" stroke="none"/><path d="M6.4 5.8v12.4"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M5.6 5.6v12.8L14.6 12Z" fill="currentColor" stroke="none"/><path d="M17.6 5.8v12.4"/></symbol>
+  <symbol id="i-lyrics" viewBox="0 0 24 24"><rect x="4.2" y="4.2" width="15.6" height="15.6" rx="3.4"/><path d="M8.2 9.4h7.6M8.2 12.4h7.6M8.2 15.4h4.4"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="6.2" cy="12" r="1.35" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.35" fill="currentColor" stroke="none"/><circle cx="17.8" cy="12" r="1.35" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6.6 6.6 17.4 17.4M17.4 6.6 6.6 17.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5.4 12.4 9.8 16.6 18.6 7.2"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M14.6 6.4 9 12l5.6 5.6"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5.6 7.4h12.8M9.6 7.4V5.4h4.8v2M7.6 7.4l.7 11.2h7.4l.7-11.2"/></symbol>
+  <symbol id="i-vol" viewBox="0 0 24 24"><path d="M4.8 9.4h2.9L11.4 6v12L7.7 14.6H4.8Z"/><path d="M15.2 9.1a4.2 4.2 0 0 1 0 5.8"/></symbol>
+  <symbol id="i-empty" viewBox="0 0 24 24"><path d="M9 17.4V7.2l7.6-1.7v8.9"/><circle cx="6.7" cy="17.7" r="2.35"/><circle cx="14.3" cy="16.1" r="2.35"/></symbol>
+</svg>
+
+<div id="app" class="app">
+  <header class="top">
+    <div class="brand" data-el="brand">
+      <svg class="ico"><use href="#i-logo"/></svg>
+      <span class="brand-t">音匣</span>
+    </div>
+    <div class="searchbar">
+      <svg class="ico search-ic"><use href="#i-search"/></svg>
+      <input id="q" type="search" placeholder="搜索歌曲 / 歌手" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-label="搜索">
+      <button id="btnSearch" class="btn-search" title="搜索" aria-label="搜索">搜索</button>
+    </div>
+    <button id="btnSettings" class="icon-btn" title="设置" aria-label="设置" data-el="settings"><svg class="ico"><use href="#i-gear"/></svg></button>
+  </header>
+
+  <div class="body">
+    <nav class="nav" id="nav" aria-label="主导航">
+      <button class="nav-item on" data-view="search" data-el="nav-search"><svg class="ico"><use href="#i-search"/></svg><span>搜索</span></button>
+      <button class="nav-item" data-view="fav" data-el="nav-fav"><svg class="ico"><use href="#i-heart"/></svg><span>收藏</span><i class="nav-cnt" id="cntFav" hidden></i></button>
+      <button class="nav-item" data-view="playlists" data-el="nav-playlists"><svg class="ico"><use href="#i-note-list"/></svg><span>歌单</span><i class="nav-cnt" id="cntPl" hidden></i></button>
+      <button class="nav-item" data-view="recent" data-el="nav-recent"><svg class="ico"><use href="#i-clock"/></svg><span>最近播放</span></button>
+    </nav>
+
+    <main class="main">
+      <!-- 搜索视图 -->
+      <section class="view on" id="viewSearch" data-view="search">
+        <div class="view-head">
+          <h2 class="view-title">搜索</h2>
+          <span class="view-meta" id="searchMeta"></span>
+        </div>
+        <div id="chips" class="chips"></div>
+        <div id="list" class="list" role="list"></div>
+      </section>
+
+      <!-- 收藏 -->
+      <section class="view" id="viewFav" data-view="fav">
+        <div class="view-head">
+          <h2 class="view-title">我的收藏</h2>
+          <span class="view-meta" id="favMeta"></span>
+          <button class="btn-ghost" id="btnPlayFav" data-el="play-fav"><svg class="ico"><use href="#i-play"/></svg>播放全部</button>
+        </div>
+        <div class="list" id="favList" role="list"></div>
+      </section>
+
+      <!-- 歌单列表 -->
+      <section class="view" id="viewPlaylists" data-view="playlists">
+        <div class="view-head">
+          <h2 class="view-title">歌单</h2>
+          <span class="view-meta" id="plMeta"></span>
+          <button class="btn-ghost" id="btnNewPl" data-el="new-playlist"><svg class="ico"><use href="#i-plus"/></svg>新建歌单</button>
+        </div>
+        <div class="newpl" id="newPlRow" hidden>
+          <input id="newPlName" maxlength="40" placeholder="歌单名称" autocomplete="off">
+          <button class="btn-accent" id="newPlOk">创建</button>
+          <button class="btn-ghost" id="newPlCancel">取消</button>
+        </div>
+        <div class="grid" id="plGrid"></div>
+      </section>
+
+      <!-- 歌单详情 -->
+      <section class="view" id="viewPlaylist" data-view="playlist">
+        <div class="pl-head">
+          <button class="icon-btn" id="plBack" title="返回" aria-label="返回"><svg class="ico"><use href="#i-back"/></svg></button>
+          <div class="pl-cover" id="plCover"><svg class="ico ph"><use href="#i-note-list"/></svg></div>
+          <div class="pl-info">
+            <button class="pl-name" id="plName" title="点击重命名">歌单</button>
+            <div class="pl-sub" id="plMeta2"></div>
+          </div>
+          <div class="pl-ops">
+            <button class="btn-ghost" id="plPlayAll"><svg class="ico"><use href="#i-play"/></svg>播放全部</button>
+            <button class="icon-btn danger" id="plDel" title="删除歌单"><svg class="ico"><use href="#i-trash"/></svg></button>
+          </div>
+        </div>
+        <div class="pl-rename" id="plRenameRow" hidden>
+          <input id="plRenameInput" maxlength="40" autocomplete="off">
+          <button class="btn-accent" id="plRenameOk">保存</button>
+          <button class="btn-ghost" id="plRenameCancel">取消</button>
+        </div>
+        <div class="list" id="plSongs" role="list"></div>
+      </section>
+
+      <!-- 最近播放 -->
+      <section class="view" id="viewRecent" data-view="recent">
+        <div class="view-head">
+          <h2 class="view-title">最近播放</h2>
+          <span class="view-meta" id="recentMeta"></span>
+          <button class="btn-ghost" id="btnClearRecent" data-el="clear-recent"><svg class="ico"><use href="#i-trash"/></svg>清空</button>
+        </div>
+        <div class="list" id="recentList" role="list"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 播放条 -->
+  <footer class="player" id="player" hidden>
+    <div class="pl-thumb" id="pThumb">
+      <svg class="ico ph"><use href="#i-logo"/></svg>
+      <img id="cover" alt="" referrerpolicy="no-referrer" data-cov="player">
+    </div>
+    <div class="pl-text">
+      <div class="pl-title" id="pTitle">—</div>
+      <div class="pl-sub" id="pSub">—</div>
+    </div>
+    <div class="pl-actions">
+      <button class="icon-btn" id="btnFav" title="收藏" aria-label="收藏" data-el="player-fav"><svg class="ico"><use href="#i-heart"/></svg></button>
+      <button class="icon-btn" id="btnLyrics" title="歌词" aria-label="歌词" data-el="player-lyrics"><svg class="ico"><use href="#i-lyrics"/></svg></button>
+    </div>
+    <div class="pl-ctl">
+      <button class="icon-btn" id="btnPrev" title="上一首" aria-label="上一首"><svg class="ico"><use href="#i-prev"/></svg></button>
+      <button class="icon-btn play" id="btnPlay" title="播放/暂停" aria-label="播放"><svg class="ico"><use href="#i-play"/></svg></button>
+      <button class="icon-btn" id="btnNext" title="下一首" aria-label="下一首"><svg class="ico"><use href="#i-next"/></svg></button>
+    </div>
+    <div class="pl-prog">
+      <span id="tCur">0:00</span>
+      <input id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="进度">
+      <span id="tDur">0:00</span>
+    </div>
+    <button class="icon-btn" id="btnVol" title="静音" aria-label="静音"><svg class="ico"><use href="#i-vol"/></svg></button>
+  </footer>
+</div>
+
+<!-- 覆盖层 A：歌词 -->
+<div class="sheet" id="lyricsSheet" hidden data-el="lyrics-sheet">
+  <div class="sheet-card lyrics-card" role="dialog" aria-label="歌词">
+    <header class="sheet-head">
+      <img class="sh-cov" id="lyCover" alt="" loading="lazy" referrerpolicy="no-referrer" hidden data-cov="lycov">
+      <div class="sh-text">
+        <div class="sh-title" id="lyTitle">歌词</div>
+        <div class="sh-sub" id="lySub"></div>
+      </div>
+      <button class="icon-btn" data-close="lyricsSheet" data-el="lyrics-close" title="关闭" aria-label="关闭"><svg class="ico"><use href="#i-close"/></svg></button>
+    </header>
+    <div class="lyrics-body" id="lyricsBody" data-el="lyrics-body"></div>
+  </div>
+</div>
+
+<!-- 覆盖层 B：设置 -->
+<div class="sheet" id="settingsSheet" hidden data-el="settings-sheet">
+  <div class="sheet-card" role="dialog" aria-label="设置">
+    <header class="sheet-head">
+      <div class="sh-text"><div class="sh-title">设置</div></div>
+      <button class="icon-btn" data-close="settingsSheet" title="关闭" aria-label="关闭"><svg class="ico"><use href="#i-close"/></svg></button>
+    </header>
+    <div class="sheet-body" id="settingsBody"></div>
+  </div>
+</div>
+
+<!-- 覆盖层 C：加入歌单 -->
+<div class="sheet" id="addSheet" hidden data-el="add-sheet">
+  <div class="sheet-card add-card" role="dialog" aria-label="加入歌单">
+    <header class="sheet-head">
+      <div class="sh-text">
+        <div class="sh-title">加入歌单</div>
+        <div class="sh-sub" id="addSong"></div>
+      </div>
+      <button class="icon-btn" data-close="addSheet" title="关闭" aria-label="关闭"><svg class="ico"><use href="#i-close"/></svg></button>
+    </header>
+    <div class="add-list" id="addList"></div>
+    <div class="add-new">
+      <input id="addNewName" maxlength="40" placeholder="新建歌单并加入…" autocomplete="off">
+      <button class="btn-accent" id="addNewBtn">新建并加入</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/bridge.js"></script>
+<script src="js/providers/netease.js"></script>
+<script src="js/providers/qq.js"></script>
+<script src="js/providers/kugou.js"></script>
+<script src="js/providers/index.js"></script>
+<script src="js/core/merge.js"></script>
+<script src="js/core/player.js"></script>
+<script src="js/core/library.js"></script>
+<script src="js/core/lyrics.js"></script>
+<script src="js/ui/app.js"></script>
+</body>
+</html>

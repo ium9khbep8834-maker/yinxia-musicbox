@@ -1,0 +1,55 @@
+plugins {
+    id 'com.android.application'
+}
+
+// web/ 是两端唯一前端源（位于 ../web），构建时整体复制进 assets/web，不把副本提交进版本库。
+def repoWebDir = rootProject.file('../web')
+def generatedAssetsDir = file("$buildDir/generated/webAssets")
+
+android {
+    namespace 'com.yinxia.music'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.yinxia.music'
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName '1.0.0'
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets', generatedAssetsDir.absolutePath]
+        }
+    }
+}
+
+// 把仓库里的 web/ 复制到 assets/web（构建产物目录，不落版本库）
+tasks.register('copyWebAssets', Copy) {
+    from repoWebDir
+    into new File(generatedAssetsDir, 'web')
+    doFirst {
+        if (!repoWebDir.isDirectory()) {
+            throw new GradleException("找不到前端目录: ${repoWebDir}")
+        }
+    }
+}
+
+// 资源合并前必须先复制完前端；同时挂到 preBuild，保证顺序稳定
+tasks.matching { it.name == 'preBuild' }.configureEach { dependsOn 'copyWebAssets' }
+tasks.matching { it.name.startsWith('merge') && it.name.endsWith('Assets') }.configureEach { dependsOn 'copyWebAssets' }

@@ -1,0 +1,18 @@
+// 音匣 Android 壳 —— 根构建脚本
+// 只用 AGP，无额外依赖（androidx 也不需要），全部 Java。
+//
+// 离线构建兼容：AGP 8.5.2 传递依赖 org.jetbrains.kotlin:kotlin-stdlib/kotlin-reflect:1.9.20，
+// 本机 Gradle 缓存里恰好缺 1.9.20 的 stdlib/reflect（有 1.9.22），
+// 因此把这两个传递依赖强制到缓存中实际存在的 1.9.22（同一 1.9 线，AGP 无需改动）。
+buildscript {
+    configurations.classpath {
+        resolutionStrategy {
+            force 'org.jetbrains.kotlin:kotlin-stdlib:1.9.22'
+            force 'org.jetbrains.kotlin:kotlin-reflect:1.9.22'
+        }
+    }
+}
+
+plugins {
+    id 'com.android.application' version '8.5.2' apply false
+}

@@ -9,7 +9,6 @@ android/local.properties
 vendor/
 probe/ref/
 probe/edgeprof/
-windows/_probe/
 
 # 临时/日志
 *.log
