@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 简单矢量图标：深色圆角底 + 橙色音符 -->
+<!-- 简单矢量图标：品牌蓝底 + 白色音符（与 Windows 端 app.ico 同一视觉） -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
     <path
-        android:fillColor="#101014"
+        android:fillColor="#4A7DFF"
         android:pathData="M0,0h108v108h-108z" />
     <path
-        android:fillColor="#FF7A45"
+        android:fillColor="#FFFFFF"
         android:pathData="M70,22 L70,62.5 C70,70 64,75.5 57,75.5 C50.5,75.5 45.5,71 45.5,65 C45.5,59 50.5,54.5 57,54.5 C58.8,54.5 60.5,54.8 62,55.4 L62,36.5 L46,40.5 L46,68 C46,75.5 40,81 33,81 C26.5,81 21.5,76.5 21.5,70.5 C21.5,64.5 26.5,60 33,60 C34.8,60 36.5,60.3 38,60.9 L38,28 L70,22 Z" />
 </vector>
